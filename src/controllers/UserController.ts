@@ -1,4 +1,5 @@
-import { UserDTO } from '../repositories/dtos/UserDTO';
+import { CreateUserDTO } from '../repositories/dtos/CreateUserDTO';
+import { UpdateUserDTO } from '../repositories/dtos/UpdateUserDTO';
 import { IUserRepository } from '../repositories/interfaces/IUserRepository';
 import UserRepository from '../repositories/UserRepository';
 
@@ -20,9 +21,19 @@ class UserController {
         return user;
     }
 
-    async create(user: UserDTO) {
+    async create(user: CreateUserDTO) {
         const createdUser = await this.userRepository.create(user);
         return createdUser;
+    }
+
+    async update(user: UpdateUserDTO, id: number) {
+        const updatedUser = await this.userRepository.update(user, id);
+        return updatedUser;
+    }
+
+    async delete(id: number) {
+        const deletedUser = await this.userRepository.delete(id);
+        return deletedUser;
     }
 }
 
