@@ -1,4 +1,4 @@
-import User from '../database/models/User';
+import { UserDTO } from '../repositories/dtos/UserDTO';
 import { IUserRepository } from '../repositories/interfaces/IUserRepository';
 import UserRepository from '../repositories/UserRepository';
 
@@ -15,7 +15,12 @@ class UserController {
         return users;
     }
 
-    async create(user: User) {
+    async getById(id: number) {
+        const user = await this.userRepository.getById(+id);
+        return user;
+    }
+
+    async create(user: UserDTO) {
         const createdUser = await this.userRepository.create(user);
         return createdUser;
     }

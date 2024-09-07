@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import UserController from '../controllers/UserController';
-import User from '../database/models/User';
+import { UserDTO } from '../repositories/dtos/UserDTO';
 
 export async function UserRoutes(fastify: FastifyInstance) {
 
@@ -11,7 +11,16 @@ export async function UserRoutes(fastify: FastifyInstance) {
         return reply.send(users);
     });
 
-    fastify.post<{Body: User}>('/', async (request, reply) => {
+    fastify.get<{Params: { id: number }}>('/:id', async (request, reply) => {
+        const { id } = request.params;
+
+        const user = await userController.getById(+id);
+        if(!user) return reply.status(404).send({message: 'User not found!'});
+
+        return reply.send(user);
+    });
+
+    fastify.post<{Body: UserDTO}>('/', async (request, reply) => {
         const createdUser = await userController.create(request.body);
         return reply.send(createdUser);
     });
