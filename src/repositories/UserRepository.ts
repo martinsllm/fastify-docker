@@ -1,54 +1,61 @@
-import User from '../database/models/User';
-import { CreateUserDTO } from './dtos/CreateUserDTO';
-import { UpdateUserDTO } from './dtos/UpdateUserDTO';
-import { IUserRepository } from './interfaces/IUserRepository';
+import User from '../database/models/User'
+import { hashPassword } from '../services/PasswordCrypto'
+import type { CreateUserDTO } from './dtos/CreateUserDTO'
+import type { UpdateUserDTO } from './dtos/UpdateUserDTO'
+import type { IUserRepository } from './interfaces/IUserRepository'
 
 class UserRepository implements IUserRepository {
+  async get(): Promise<User[]> {
+    const users = await User.findAll()
+    return users
+  }
 
-    async get(): Promise<User[]> {
-        const users = await User.findAll();
-        return users;
-    }
+  async getById(id: number): Promise<User | null> {
+    const user = await User.findOne({
+      where: { id },
+    })
 
-    async getById(id: number): Promise<User | null> {
-        const user = await User.findOne({
-            where: { id }
-        });
+    return user
+  }
 
-        return user;
-    }
+  async create(user: CreateUserDTO): Promise<User> {
+    const hashedPassword = await hashPassword(user.password)
 
-    async create(user: CreateUserDTO): Promise<User> {
-        const createdUser = await User.create({ ...user });
-        return createdUser;
-    }
+    const createdUser = await User.create({
+      ...user,
+      password: hashedPassword,
+    })
+    return createdUser
+  }
 
-    async update(user: UpdateUserDTO, id: number): Promise<User | null> {
-        const foundUser = await this.getById(id);
+  async update(user: UpdateUserDTO, id: number): Promise<User | null> {
+    const foundUser = await this.getById(id)
 
-        if(foundUser != null) {
-            await User.update({ ...user }, {
-                where: { id }
-            });
+    if (foundUser != null) {
+      await User.update(
+        { ...user },
+        {
+          where: { id },
         }
-
-        return foundUser;
+      )
     }
 
-    async delete(id: number): Promise<User | null> {
-        const foundUser = await this.getById(id);
+    return foundUser
+  }
 
-        if(foundUser != null) {
-            await User.destroy({
-                where: {
-                    id
-                }
-            })
-        }
+  async delete(id: number): Promise<User | null> {
+    const foundUser = await this.getById(id)
 
-        return foundUser;
+    if (foundUser != null) {
+      await User.destroy({
+        where: {
+          id,
+        },
+      })
     }
 
+    return foundUser
+  }
 }
 
-export default UserRepository;
+export default UserRepository

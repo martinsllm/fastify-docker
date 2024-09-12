@@ -1,8 +1,8 @@
-import server from './server';
-import 'dotenv/config';
+import server from './http/server'
+import 'dotenv/config'
 
-const PORT = process.env.NODE_DOCKER_PORT || 8080;
+const PORT = process.env.NODE_DOCKER_PORT || 8080
 
-server.listen({ port: +PORT, host: "0.0.0.0" }, (err, address) => {
-    console.log(`Server listening on ${address}`);
-});
+server.listen({ port: +PORT, host: '0.0.0.0' }, (err, address) => {
+  console.log(`Server listening on ${address}`)
+})
