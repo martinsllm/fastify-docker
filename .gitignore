@@ -8,3 +8,6 @@ build/
 
 -code.header
 
+tmp/uploads/*
+!tmp/uploads/.gitkeep
+

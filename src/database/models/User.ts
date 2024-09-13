@@ -44,4 +44,6 @@ User.hasMany(Photo, {
   foreignKey: 'userId',
 })
 
+Photo.belongsTo(User)
+
 export default User

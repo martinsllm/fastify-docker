@@ -39,6 +39,4 @@ Photo.init(
   }
 )
 
-Photo.belongsTo(User)
-
 export default Photo
