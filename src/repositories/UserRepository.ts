@@ -1,10 +1,17 @@
 import User from '../database/models/User'
-import { hashPassword } from '../services/PasswordCrypto'
+import CryptoService from '../services/CryptoService'
+import type { ICryptoService } from '../services/interfaces/ICryptoService'
 import type { CreateUserDTO } from './dtos/CreateUserDTO'
 import type { UpdateUserDTO } from './dtos/UpdateUserDTO'
 import type { IUserRepository } from './interfaces/IUserRepository'
 
 class UserRepository implements IUserRepository {
+  private readonly cryptoService: ICryptoService
+
+  constructor() {
+    this.cryptoService = new CryptoService()
+  }
+
   async get(): Promise<User[]> {
     const users = await User.findAll()
     return users
@@ -27,7 +34,7 @@ class UserRepository implements IUserRepository {
   }
 
   async create(user: CreateUserDTO): Promise<User> {
-    const hashedPassword = await hashPassword(user.password)
+    const hashedPassword = await this.cryptoService.hashPassword(user.password)
 
     const createdUser = await User.create({
       ...user,

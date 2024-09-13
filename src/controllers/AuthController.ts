@@ -1,16 +1,16 @@
-import AuthRepository from '../repositories/AuthRepository'
+import AuthService from '../services/AuthService'
 import type { LoginDTO } from '../repositories/dtos/LoginDTO'
-import type { IAuthRepository } from '../repositories/interfaces/IAuthRepository'
+import type { IAuthService } from '../services/interfaces/IAuthService'
 
 class AuthController {
-  private readonly authRepository: IAuthRepository
+  private readonly authService: IAuthService
 
   constructor() {
-    this.authRepository = new AuthRepository()
+    this.authService = new AuthService()
   }
 
   async login(login: LoginDTO) {
-    const verifyAccess = await this.authRepository.login(login)
+    const verifyAccess = await this.authService.login(login)
     return verifyAccess
   }
 }

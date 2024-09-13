@@ -1,7 +1,7 @@
 import type User from '../../database/models/User'
-import type { LoginDTO } from '../dtos/LoginDTO'
+import type { LoginDTO } from '../../repositories/dtos/LoginDTO'
 
-export interface IAuthRepository {
+export interface IAuthService {
   login(login: LoginDTO): Promise<string | null>
 
   validateEmail(email: string): Promise<User | null>

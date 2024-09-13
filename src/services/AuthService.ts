@@ -1,16 +1,19 @@
 import type User from '../database/models/User'
-import { sign } from '../services/JWTService'
-import { verifyPassword } from '../services/PasswordCrypto'
-import type { LoginDTO } from './dtos/LoginDTO'
-import type { IAuthRepository } from './interfaces/IAuthRepository'
-import type { IUserRepository } from './interfaces/IUserRepository'
-import UserRepository from './UserRepository'
+import type { LoginDTO } from '../repositories/dtos/LoginDTO'
+import type { IUserRepository } from '../repositories/interfaces/IUserRepository'
+import UserRepository from '../repositories/UserRepository'
+import type { ICryptoService } from './interfaces/ICryptoService'
+import CryptoService from './CryptoService'
+import type { IAuthService } from './interfaces/IAuthService'
+import { sign } from './JWTService'
 
-class AuthRepository implements IAuthRepository {
+class AuthService implements IAuthService {
   private readonly userRepository: IUserRepository
+  private readonly cryptoService: ICryptoService
 
   constructor() {
     this.userRepository = new UserRepository()
+    this.cryptoService = new CryptoService()
   }
 
   async login(login: LoginDTO): Promise<string | null> {
@@ -31,7 +34,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   async checkPassword(user: User, password: string): Promise<boolean> {
-    return await verifyPassword(password, user.password)
+    return await this.cryptoService.verifyPassword(password, user.password)
   }
 
   async generateToken(user: User): Promise<string> {
@@ -39,4 +42,4 @@ class AuthRepository implements IAuthRepository {
   }
 }
 
-export default AuthRepository
+export default AuthService
