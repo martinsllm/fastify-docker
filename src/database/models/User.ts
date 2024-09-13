@@ -1,6 +1,7 @@
 import { Model } from 'sequelize'
 import db from '.'
 import sequelize from 'sequelize'
+import Photo from './Photo'
 
 class User extends Model {
   declare id: number
@@ -38,5 +39,9 @@ User.init(
     timestamps: false,
   }
 )
+
+User.hasMany(Photo, {
+  foreignKey: 'userId',
+})
 
 export default User
