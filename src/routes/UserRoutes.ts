@@ -1,19 +1,23 @@
-import type { FastifyInstance } from 'fastify'
 import UserController from '../controllers/UserController'
-import type { CreateUserDTO } from '../repositories/dtos/CreateUserDTO'
-import type { UpdateUserDTO } from '../repositories/dtos/UpdateUserDTO'
+import type { UserDTO } from '../repositories/dtos/UserDTO'
 import { verifyToken } from '../services/JWTService'
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import { userValidation } from '../middlewares/UserValidationSchema'
 
-export async function UserRoutes(fastify: FastifyInstance) {
+export const UserRoutes: FastifyPluginAsyncZod = async fastify => {
   const userController = new UserController()
 
-  fastify.post<{ Body: CreateUserDTO }>('/', async (request, reply) => {
-    const createdUser = await userController.create(request.body)
-    if (!createdUser)
-      return reply.status(400).send({ message: 'Error in user register!' })
+  fastify.post<{ Body: UserDTO }>(
+    '/',
+    userValidation,
+    async (request, reply) => {
+      const createdUser = await userController.create(request.body)
+      if (!createdUser)
+        return reply.status(400).send({ message: 'Error in user register!' })
 
-    return reply.status(201).send()
-  })
+      return reply.status(201).send()
+    }
+  )
 
   fastify.addHook('preHandler', verifyToken)
 
@@ -31,8 +35,9 @@ export async function UserRoutes(fastify: FastifyInstance) {
     return reply.send(user)
   })
 
-  fastify.put<{ Body: UpdateUserDTO; Params: { id: number } }>(
+  fastify.put<{ Body: UserDTO; Params: { id: number } }>(
     '/:id',
+    userValidation,
     async (request, reply) => {
       const { id } = request.params
 

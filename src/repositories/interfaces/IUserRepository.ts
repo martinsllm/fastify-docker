@@ -1,6 +1,5 @@
 import type User from '../../database/models/User'
-import type { CreateUserDTO } from '../dtos/CreateUserDTO'
-import type { UpdateUserDTO } from '../dtos/UpdateUserDTO'
+import type { UserDTO } from '../dtos/UserDTO'
 
 export interface IUserRepository {
   get(): Promise<User[]>
@@ -9,9 +8,9 @@ export interface IUserRepository {
 
   getByEmail(email: string): Promise<User | null>
 
-  create(user: CreateUserDTO): Promise<User>
+  create(user: UserDTO): Promise<User>
 
-  update(user: UpdateUserDTO, id: number): Promise<User | null>
+  update(user: UserDTO, id: number): Promise<User | null>
 
   delete(id: number): Promise<User | null>
 }

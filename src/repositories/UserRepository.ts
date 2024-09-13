@@ -1,8 +1,7 @@
 import User from '../database/models/User'
 import CryptoService from '../services/CryptoService'
 import type { ICryptoService } from '../services/interfaces/ICryptoService'
-import type { CreateUserDTO } from './dtos/CreateUserDTO'
-import type { UpdateUserDTO } from './dtos/UpdateUserDTO'
+import type { UserDTO } from './dtos/UserDTO'
 import type { IUserRepository } from './interfaces/IUserRepository'
 
 class UserRepository implements IUserRepository {
@@ -33,7 +32,7 @@ class UserRepository implements IUserRepository {
     return user
   }
 
-  async create(user: CreateUserDTO): Promise<User> {
+  async create(user: UserDTO): Promise<User> {
     const hashedPassword = await this.cryptoService.hashPassword(user.password)
 
     const createdUser = await User.create({
@@ -43,7 +42,7 @@ class UserRepository implements IUserRepository {
     return createdUser
   }
 
-  async update(user: UpdateUserDTO, id: number): Promise<User | null> {
+  async update(user: UserDTO, id: number): Promise<User | null> {
     const foundUser = await this.getById(id)
 
     if (foundUser != null) {

@@ -1,4 +1,4 @@
-import type { CreateUserDTO } from '../repositories/dtos/CreateUserDTO'
+import type { CreateUserDTO } from '../repositories/dtos/UserDTO'
 import type { UpdateUserDTO } from '../repositories/dtos/UpdateUserDTO'
 import type { IUserRepository } from '../repositories/interfaces/IUserRepository'
 import UserRepository from '../repositories/UserRepository'
