@@ -18,6 +18,14 @@ class UserRepository implements IUserRepository {
     return user
   }
 
+  async getByEmail(email: string): Promise<User | null> {
+    const user = await User.findOne({
+      where: { email },
+    })
+
+    return user
+  }
+
   async create(user: CreateUserDTO): Promise<User> {
     const hashedPassword = await hashPassword(user.password)
 
