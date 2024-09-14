@@ -1,5 +1,4 @@
-import type { CreateUserDTO } from '../repositories/dtos/UserDTO'
-import type { UpdateUserDTO } from '../repositories/dtos/UpdateUserDTO'
+import type { UserDTO } from '../repositories/dtos/UserDTO'
 import type { IUserRepository } from '../repositories/interfaces/IUserRepository'
 import UserRepository from '../repositories/UserRepository'
 
@@ -20,12 +19,12 @@ class UserController {
     return user
   }
 
-  async create(user: CreateUserDTO) {
+  async create(user: UserDTO) {
     const createdUser = await this.userRepository.create(user)
     return createdUser
   }
 
-  async update(user: UpdateUserDTO, id: number) {
+  async update(user: UserDTO, id: number) {
     const updatedUser = await this.userRepository.update(user, id)
     return updatedUser
   }
