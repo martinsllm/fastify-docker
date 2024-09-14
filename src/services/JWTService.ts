@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import jwt from 'jsonwebtoken'
-import type { JwtPayload, SignOptions } from 'jsonwebtoken'
+import type { SignOptions } from 'jsonwebtoken'
 
 const secret = process.env.JWT_SECRET as string
 
@@ -26,9 +26,4 @@ const verifyToken = (
   done()
 }
 
-const decodeToken = (token: string) => {
-  const decoded = jwt.verify(token, secret) as JwtPayload
-  return decoded.id
-}
-
-export { sign, verifyToken, decodeToken }
+export { sign, verifyToken }
