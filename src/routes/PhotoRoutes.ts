@@ -12,6 +12,16 @@ export async function PhotoRoutes(fastify: FastifyInstance) {
 
   fastify.addHook('preHandler', verifyToken)
 
+  fastify.get<{ Params: { userId: number } }>(
+    '/user/:userId',
+    async (request, reply) => {
+      const { userId } = request.params
+      const photos = await photoController.getByUser(userId)
+
+      return reply.send(photos)
+    }
+  )
+
   fastify.post(
     '/',
     { preHandler: multer(multerConfig).single('file') },

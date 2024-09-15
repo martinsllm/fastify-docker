@@ -9,6 +9,11 @@ class PhotoController {
     this.photoRepository = new PhotoRepository()
   }
 
+  async getByUser(userId: number) {
+    const photos = await this.photoRepository.getByUser(userId)
+    return photos
+  }
+
   async create(file: File, id: number) {
     const uploadedPhoto = await this.photoRepository.create(file, id)
     return uploadedPhoto
