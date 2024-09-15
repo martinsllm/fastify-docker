@@ -18,6 +18,11 @@ class PhotoController {
     const uploadedPhoto = await this.photoRepository.create(file, id)
     return uploadedPhoto
   }
+
+  async delete(id: number) {
+    const deletedPhoto = await this.photoRepository.delete(id)
+    return deletedPhoto
+  }
 }
 
 export default PhotoController

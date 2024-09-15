@@ -3,6 +3,11 @@ import Photo from '../database/models/Photo'
 import type { IPhotoRepository } from './interfaces/IPhotoRepository'
 
 class PhotoRepository implements IPhotoRepository {
+  async getById(id: number): Promise<Photo | null> {
+    const photo = await Photo.findByPk(id)
+    return photo
+  }
+
   async getByUser(userId: number): Promise<Photo[]> {
     const photos = await Photo.findAll({
       where: {
@@ -23,6 +28,20 @@ class PhotoRepository implements IPhotoRepository {
     })
 
     return uploadedPhoto
+  }
+
+  async delete(id: number): Promise<Photo | null> {
+    const foundPhoto = await this.getById(id)
+
+    if (foundPhoto != null) {
+      await Photo.destroy({
+        where: {
+          id,
+        },
+      })
+    }
+
+    return foundPhoto
   }
 }
 
