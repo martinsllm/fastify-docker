@@ -1,5 +1,5 @@
 {
-  "name": "fastify-docker-ps",
+  "name": "photos-portfolio-api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
