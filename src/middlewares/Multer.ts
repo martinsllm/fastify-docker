@@ -1,9 +1,9 @@
 import multer from 'fastify-multer'
 import crypto from 'crypto'
 import path from 'path'
-import fs from 'fs'
 import { decode } from 'jsonwebtoken'
 import UserController from '../controllers/UserController'
+import { createDirectory } from '../services/FileService'
 
 const userController = new UserController()
 
@@ -18,8 +18,7 @@ export default {
       const basePath = './tmp/uploads'
       const dir = path.resolve(basePath, user?.name.split(' ').join('_'))
 
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-
+      createDirectory(dir)
       cb(null, dir)
     },
     filename: (req, file, cb) => {

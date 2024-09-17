@@ -2,9 +2,9 @@ import type { FastifyInstance } from 'fastify'
 import { verifyToken } from '../services/JWTService'
 import multerConfig from '../middlewares/Multer'
 import multer from 'fastify-multer'
-import fs from 'fs'
 import PhotoController from '../controllers/PhotoController'
 import { decode } from 'jsonwebtoken'
+import { deleteFile } from '../services/FileService'
 
 export async function PhotoRoutes(fastify: FastifyInstance) {
   const photoController = new PhotoController()
@@ -44,13 +44,8 @@ export async function PhotoRoutes(fastify: FastifyInstance) {
     const deletedPhoto = await photoController.delete(+id)
 
     if (deletedPhoto) {
-      const dir = deletedPhoto.url
-
-      if (fs.existsSync(dir))
-        fs.unlink(dir, err => {
-          if (err) throw err
-        })
-
+      const filePath = deletedPhoto.url
+      deleteFile(filePath)
       return reply.status(204).send()
     }
     return reply.status(400).send({ message: 'Error in photo removal!' })
