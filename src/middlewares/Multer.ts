@@ -1,25 +1,16 @@
 import multer from 'fastify-multer'
 import crypto from 'crypto'
-import path from 'path'
-import { decode } from 'jsonwebtoken'
-import UserController from '../controllers/UserController'
-import { createDirectory } from '../services/FileService'
-
-const userController = new UserController()
+import { verifyDirectoryPath } from '../services/FileService'
 
 export default {
   storage: multer.diskStorage({
     destination: async (req, file, cb) => {
-      const token = req.headers.authorization
-      const decodedToken = decode(token)
+      const { authorization } = req.headers
 
-      const user = await userController.getById(decodedToken.id)
-
-      const basePath = './tmp/uploads'
-      const dir = path.resolve(basePath, user?.name.split(' ').join('_'))
-
-      createDirectory(dir)
-      cb(null, dir)
+      if (authorization) {
+        const dirPath = await verifyDirectoryPath(authorization)
+        cb(null, dirPath)
+      }
     },
     filename: (req, file, cb) => {
       const hash = crypto.randomBytes(6).toString('hex')
